@@ -1,4 +1,6 @@
 #include "defense.h"
 
-defense::defense() {}
+defense::defense() {
+    setPixmap(QPixmap("").scaled(100,100));
+}
 void defense::shoot() {}

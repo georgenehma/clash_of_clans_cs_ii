@@ -3,9 +3,9 @@
 #include <QObject>
 #include <QGraphicsItem>
 
-class castle: public QObject, public QGraphicsItem
+class castle: public QObject, public QGraphicsPixmapItem
 {
-
+    Q_OBJECT
 public:
     castle();
     double health;

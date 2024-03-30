@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>canon.webp</file>
+        <file>castle.jpeg</file>
+        <file>fence.webp</file>
+    </qresource>
+</RCC>

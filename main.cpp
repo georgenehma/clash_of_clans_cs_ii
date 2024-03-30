@@ -5,24 +5,47 @@
 #include <QTextStream>
 #include <QFile>
 #include <QString>
-#include<castle.h>
-#include<citizen.h>
-#include<enemy.h>
-#include<fence.h>
-#include<defense.h>
+#include <QGraphicsView>
+#include "castle.h"
+#include "citizen.h"
+#include "enemy.h"
+#include "fence.h"
+#include "defense.h"
 
 using namespace std;
 void read_file(vector<vector<int>>& data, int rows, int columns);
 //Precondition: Receives a 2D vector and the dimensions one wishes to set it to
 //Postcondition: If the file is successfully read it returns true, otherwise it returns false
 
-void instantiate_items(vector<vector<int>> data, vector<defense*>& defense, vector<castle*>& castles, vector<enemy*>& enemies);
+void instantiate_items(vector<vector<int>> data, vector<defense*>& defense, vector<castle*>& castles, vector<fence*>& fences);
 //Precondition: Receives a 2d vector containing 0 for empty land, 1 for clan castle, 2 for defense unit, 3 for fence. It also receives three vectors of pointers towards these different objects
 //Postcondition: instantiates these items by calling their respective constructors and fills
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QGraphicsView * view= new QGraphicsView; //Creates a view
+    view->setFixedSize(600,600); //Sets size of the view
+    QGraphicsScene* scene = new QGraphicsScene; //Creates a scene
+    scene->setSceneRect(0,0,600,600); //Sets dimensions of the scene from a starting point (i.e. 0,0 the origin which is the top left corner)
+    view->setScene(scene);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  //Turns off horizontal scroll bar
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //Turns off vertical scroll bar
+    view->show();
+    vector<vector<int>> data;
+    read_file(data, 6, 6);
+    vector<defense*> defenses;
+    vector<castle*> castles;
+    vector<fence*> fences;
+    instantiate_items(data, defenses, castles, fences);
+    //vector<QGraphicsPixmapItem*> all_items; //This vector contains all items in game
+    //all_items.insert(all_items.end(), castles.begin(), castles.end());
+    //all_items.insert(all_items.end(), fences.begin(), fences.end());
+    //all_items.insert(all_items.end(), defenses.begin(), defenses.end());
+    //for (size_t i = 0 ; i < all_items.size() ; i++){ //Adding all items to the scene
+        //scene->addItem(all_items[i]);
+    //}
 
 }
 
@@ -30,7 +53,7 @@ void read_file(vector<vector<int>>& data, int rows, int columns){
     for (int i = 0 ; i < rows ; i++){
         data[i].resize(columns);
     }
-    QFile file("path"); //Add path
+    QFile file(":text.qrc/text.txt"); //Add path
     QFile in(&file);
     for (size_t i = 0; i < data.size(); i++)  //Source: https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/
     {
@@ -44,26 +67,30 @@ void read_file(vector<vector<int>>& data, int rows, int columns){
 
 }
 
-void instantiate_items(vector<vector<int>> data, vector<defense*>& defense, vector<castle*>& castles,  vector<enemy*>& enemies){
+void instantiate_items(vector<vector<int>> data, vector<defense*>& defenses, vector<castle*>& castles,  vector<fence*>& fences){
     for (size_t i = 0; i < data.size(); i++)  //Source: https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/
     {
         for (size_t j = 0; j < data[i].size(); j++)
         {
             if (data[i][j]==1){
-                //castle* inst_castle = new castle;
-                //castles.push_back(inst_castle);
+                castle* inst_castle = new castle;
+                inst_castle->setPos(i*100, j*100);
+                castles.push_back(inst_castle);
             }
             else if(data[i][j]==2){
-                //defense* inst_defense = new defense;
-                //defense.push_back(inst_defense);
+                defense* inst_defense = new defense;
+                inst_defense->setPos(i*100, j*100);
+                defenses.push_back(inst_defense);
 
             }
             else if(data[i][j]==3){
-                //enemy* inst_enemy = new enemy;
-                //enemy.push_back(inst_defense);
+                fence* inst_fence = new fence;
+                inst_fence->setPos(i*100, j*100);
+                fences.push_back(inst_fence);
 
             }
 
         }
     }
 }
+

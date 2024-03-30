@@ -1,3 +1,6 @@
 #include "fence.h"
 
-fence::fence() {}
+fence::fence() {
+    setPixmap(QPixmap("").scaled(100,100));
+
+}
