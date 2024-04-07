@@ -11,6 +11,9 @@
 #include "enemy.h"
 #include "fence.h"
 #include "defense.h"
+#include <iostream>
+#include <QUrl>
+using namespace std;
 
 using namespace std;
 void read_file(vector<vector<int>>& data, int rows, int columns);
@@ -33,44 +36,77 @@ int main(int argc, char *argv[])
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  //Turns off horizontal scroll bar
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //Turns off vertical scroll bar
     view->show();
-    vector<vector<int>> data;
-    read_file(data, 6, 6);
+
+
+    //vector<vector<int>> data;
+    // const QString filename = QCoreApplication::applicationDirPath() + "/text.txt";
+    //QFile file(":/text.txt");
+    //QTextStream in(&file);
+    //QString something;
+    //in>>something;
+
+
+    //read_file(data, 6, 6);
+    vector<int> first(6,0);
+    vector<vector<int>> data(6,first);
+    data={{2,2,2,0,2,3}, {2,2,2,0,2,3}, {2,2,2,0,2,3}, {2,2,2,1,2,3}, {2,2,2,0,2,3}, {2,2,2,0,2,3}};
+
+
+    //for (int i = 0; i < data.size(); i++)  //Source: https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/
+    //{
+    //for (int j = 0; j < data[i].size(); j++)
+    //{
+    //data[i][j]=(i)%3+1;
+
+
+    //}
+    //}
     vector<defense*> defenses;
     vector<castle*> castles;
     vector<fence*> fences;
     instantiate_items(data, defenses, castles, fences);
-    //vector<QGraphicsPixmapItem*> all_items; //This vector contains all items in game
-    //all_items.insert(all_items.end(), castles.begin(), castles.end());
-    //all_items.insert(all_items.end(), fences.begin(), fences.end());
-    //all_items.insert(all_items.end(), defenses.begin(), defenses.end());
-    //for (size_t i = 0 ; i < all_items.size() ; i++){ //Adding all items to the scene
-        //scene->addItem(all_items[i]);
-    //}
+    vector<QGraphicsPixmapItem*> all_items; //This vector contains all items in game
+    all_items.insert(all_items.end(), castles.begin(), castles.end());
+    all_items.insert(all_items.end(), fences.begin(), fences.end());
+    all_items.insert(all_items.end(), defenses.begin(), defenses.end());
+    for (size_t i = 0 ; i < all_items.size() ; i++){ //Adding all items to the scene
+        scene->addItem(all_items[i]);
+    }
+    enemy enem(castles[0]);
+    scene->addItem(&enem);
+    return a.exec();
+
+
+
+
 
 }
 
 void read_file(vector<vector<int>>& data, int rows, int columns){
-    for (int i = 0 ; i < rows ; i++){
-        data[i].resize(columns);
-    }
+    vector<int> first_dimension(rows,0);
+    vector<vector<int>> second_dimension(columns,first_dimension);
+    data=second_dimension; //Data becomes a vector containing all 0s with the specified dimensions
     QFile file(":text.qrc/text.txt"); //Add path
-    QFile in(&file);
-    for (size_t i = 0; i < data.size(); i++)  //Source: https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/
+    QTextStream in(&file);
+    for (int i = 0; i < data.size(); i++)  //Source: https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/
     {
-        for (size_t j = 0; j < data[i].size(); j++)
+        for (int j = 0; j < data[i].size(); j++)
         {
-            QString::number(data[i][j]);
+            QString number;
+            in>>number;
+            data[i][j]=number.toInt(); //Here we copy the information in the file to the 2d vector
+
 
         }
     }
-    in.close();
+    file.close();
 
 }
 
 void instantiate_items(vector<vector<int>> data, vector<defense*>& defenses, vector<castle*>& castles,  vector<fence*>& fences){
-    for (size_t i = 0; i < data.size(); i++)  //Source: https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/
+    for (int i = 0; i < data.size(); i++)  //Source: https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/
     {
-        for (size_t j = 0; j < data[i].size(); j++)
+        for (int j = 0; j < data[i].size(); j++)
         {
             if (data[i][j]==1){
                 castle* inst_castle = new castle;
@@ -91,6 +127,7 @@ void instantiate_items(vector<vector<int>> data, vector<defense*>& defenses, vec
             }
 
         }
+        cout<<endl;
     }
 }
 

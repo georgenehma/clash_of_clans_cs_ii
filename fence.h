@@ -9,7 +9,7 @@ private:
 public:
     fence();
     double getHealth()const;//getter for health
-    void Damaged(int amount);// function for applying damage to fence, decreasing health of fence
+    bool Damaged(int amount);// function for applying damage to fence, decreasing health of fence
     bool isDestroyed()const;// boolean function to check if the fence is destroyed or not
 };
 
